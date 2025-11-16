@@ -25,3 +25,17 @@ flutter:
     - assets/images/fore.jpg
     - assets/images/indonesia.png
     - assets/images/google.png
+    - assets/icons/home_icon.png
+    - assets/icons/voucher_icon.png
+    - assets/icons/pesanan_icon.png
+    - assets/icons/akun_icon.png
+    - assets/images/delivery.png
+    - assets/images/pickup.png
+    - assets/images/home_banner.jpeg
+    - assets/images/myforeplan_bg.jpeg
+    - assets/icons/coin_flying.jpeg
+    - assets/images/promo1.jpeg
+    - assets/images/promo2.jpeg
+    - assets/images/promo1.png
+    - assets/icons/myforeplan_logo.jpeg
+    - assets/images/myforeplan_hero.jpeg
