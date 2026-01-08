@@ -14,7 +14,7 @@ class _AkunScreenState extends State<AkunScreen> {
   String phone = '+62895320322139';
   double profileComplete = 0.25;
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

@@ -86,7 +86,7 @@ class DetailVoucherScreen extends StatelessWidget {
               ),
             ),
             child: const Text("Gunakan Sekarang",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.white)),
           ),
         ),
       ),
