@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_fore_1/screens/kotak_masuk_screen.dart';
 import 'package:flutter_fore_1/screens/my_fore_plan.dart';
@@ -10,7 +12,12 @@ import 'screens/akun_screen.dart';
 import 'screens/detail_voucher_screen.dart';
 import 'screens/kode_voucher_screen.dart';
 
-void main() {
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 

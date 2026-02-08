@@ -1,5 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+
+class AuthService {
+  static Future<User?> signInWithGoogle() async {
+    final GoogleSignInAccount? googleUser =
+        await GoogleSignIn().signIn();
+
+    if (googleUser == null) return null;
+
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
+
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+    final userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+
+    return userCredential.user;
+  }
+
+  static Future<void> signOut() async {
+    await GoogleSignIn().signOut();
+    await FirebaseAuth.instance.signOut();
+  }
+}
 
 class ForeLoginPage extends StatelessWidget {
   const ForeLoginPage({super.key});
@@ -119,9 +148,22 @@ class ForeLoginPage extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 24),
               width: double.infinity,
               child: OutlinedButton.icon(
-                onPressed: () {},
+                onPressed: () async {
+                  try {
+                    final user = await AuthService.signInWithGoogle();
+
+                    if (user != null) {
+                      // Berhasil login → masuk ke Home
+                      Navigator.pushReplacementNamed(context, '/home');
+                    }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Login gagal: $e')),
+                    );
+                  }
+                },
                 icon: Image.asset(
-                  'assets/images/google.png', // logo Google kecil
+                  'assets/images/google.png',
                   width: 20,
                 ),
                 label: Text(

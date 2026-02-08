@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 const Color kPrimaryGreen = Color(0xFF0F6A39);
+
 
 class AkunScreen extends StatefulWidget {
   const AkunScreen({Key? key}) : super(key: key);
@@ -10,12 +13,38 @@ class AkunScreen extends StatefulWidget {
 }
 
 class _AkunScreenState extends State<AkunScreen> {
+  User? user;
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   String username = 'JOHANA';
   String phone = '+62895320322139';
   double profileComplete = 0.25;
 
+  @override
+  void initState() {
+    super.initState();
+    user = FirebaseAuth.instance.currentUser;
+
+    if (user != null && user!.displayName != null) {
+      username = user!.displayName!;
+    }
+  }
+
   @override 
   Widget build(BuildContext context) {
+    Future<void> logout() async {
+      await FirebaseAuth.instance.signOut();
+      await _googleSignIn.signOut();
+
+      if (!mounted) return;
+
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/login1',
+        (route) => false,
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Akun Saya'),
@@ -46,7 +75,12 @@ class _AkunScreenState extends State<AkunScreen> {
             Center(
               child: Stack(
                 children: [
-                  const CircleAvatar(radius: 56, backgroundColor: Colors.grey),
+                  CircleAvatar(
+                    radius: 56,
+                    backgroundImage:
+                        user?.photoURL != null ? NetworkImage(user!.photoURL!) : null,
+                    backgroundColor: Colors.grey[300],
+                  ),
                   Positioned(
                     right: 6,
                     bottom: 6,
@@ -83,6 +117,43 @@ class _AkunScreenState extends State<AkunScreen> {
             const Text('LAINNYA',
                 style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
+
+            ElevatedButton(
+              onPressed: logout,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                minimumSize: const Size(double.infinity, 48),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24),
+                ),
+              ),
+              child: const Text('Logout Semua Akun'),
+            ),
+
+            const SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepOrange,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  '/login1',
+                  (route) => false,
+                );
+              },
+              child: const Text(
+                'Keluar',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ),
+            const SizedBox(height: 40),
           ],
         ),
       ),
@@ -157,4 +228,3 @@ class _AkunScreenState extends State<AkunScreen> {
     );
   }
 }
-
